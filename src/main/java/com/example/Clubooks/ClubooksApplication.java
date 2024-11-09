@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ClubooksApplication {
 
 	public static void main(String[] args) {
-		System.out.println("FUNCIONANDO!");
 		SpringApplication.run(ClubooksApplication.class, args);
 	}
 
