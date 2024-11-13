@@ -1,6 +1,7 @@
 package com.example.Clubooks.books.controller;
 
 
+import com.example.Clubooks.books.dto.LivroExistenteDTO;
 import com.example.Clubooks.books.model.Conteudo;
 import com.example.Clubooks.books.model.Livro;
 import com.example.Clubooks.books.service.LivroService;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping()
+@RequestMapping("/book")
 public class LivroController {
 
     @Autowired
@@ -84,10 +85,27 @@ public class LivroController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //excluir o banco por completo
     @DeleteMapping("/deletartudo")
     public ResponseEntity<?> excluirtudo() {
         livroService.deletartudo();
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/listartotal")
+    public ResponseEntity<?> listarnumerolivro() {
+        var a = livroService.contarlivros();
+        return ResponseEntity.ok().body(a);
+    }
+
+    @PostMapping("/livroexistente")
+    public ResponseEntity<LivroExistenteDTO> livroExistente(@RequestBody LivroExistenteDTO dto) {
+        boolean existe = livroService.livroExistente(dto.title(), dto.capa());
+        if(existe) {
+            return ResponseEntity.ok(dto);
+        }     
+        return ResponseEntity.notFound().build();
     }
 
 

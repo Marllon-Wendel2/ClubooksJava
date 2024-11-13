@@ -4,6 +4,8 @@ import com.example.Clubooks.books.model.Conteudo;
 import com.example.Clubooks.books.model.Livro;
 import com.example.Clubooks.books.repository.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
@@ -66,10 +68,24 @@ public class LivroService {
         }
     }
 
+    //exclui todos os livros
     public void deletartudo() {
         livroRepository.deleteAll();
     }
 
+    //conta todos os livros
+    public long contarlivros() {
+       return  livroRepository.count();
+    }
 
+    public boolean livroExistente(String title, String capa) {
+        // Verifica se o livro com o título e a capa existe
+        if (livroRepository.existsByTitleAndCapa(title, capa)) {
+            return true;
 
+        } else {
+            return false;
+        }
+
+    }
 }
