@@ -1,6 +1,7 @@
 package com.example.Clubooks.books.controller;
 
 
+import com.example.Clubooks.books.dto.BookDTO;
 import com.example.Clubooks.books.dto.LivroExistenteDTO;
 import com.example.Clubooks.books.model.Conteudo;
 import com.example.Clubooks.books.model.Livro;
@@ -107,6 +108,14 @@ public class LivroController {
         }     
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/procurarlivroexterno/{query}")
+    public ResponseEntity<?> procurarlivroexterno(@PathVariable String query){
+        BookDTO json = livroService.consumirapis(query);
+
+        return ResponseEntity.ok(json);
+    }
+
 
 
 

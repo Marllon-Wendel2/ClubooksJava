@@ -1,17 +1,14 @@
 package com.example.Clubooks.books.service;
 
-import com.example.Clubooks.books.model.Conteudo;
+import com.example.Clubooks.books.dto.BookDTO;
 import com.example.Clubooks.books.model.Livro;
 import com.example.Clubooks.books.repository.LivroRepository;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,7 +72,7 @@ public class LivroService {
 
     //conta todos os livros
     public long contarlivros() {
-       return  livroRepository.count();
+        return livroRepository.count();
     }
 
     public boolean livroExistente(String title, String capa) {
@@ -88,4 +85,24 @@ public class LivroService {
         }
 
     }
+
+    public BookDTO consumirapis(String query) {
+
+        ConverterDados conversor = new ConverterDados();
+        ConsumirAPI consumir = new ConsumirAPI();
+
+
+        var json = consumir.obterdados(query);
+        System.out.println("Resposta JSON da API: " + json);
+
+
+        BookDTO dados = conversor.obterdados(json, BookDTO.class);
+        System.out.println("Dados convertidos para BookDTO: " + dados);
+
+
+        return dados;
+    }
+
+
+
 }
