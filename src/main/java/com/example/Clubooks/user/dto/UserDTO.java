@@ -1,9 +1,7 @@
-package com.example.Clubooks.user.dtos;
+package com.example.Clubooks.user.dto;
 
-import com.example.Clubooks.user.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 public record UserDTO(
         @NotBlank(message = "Informe username")
