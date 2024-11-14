@@ -1,37 +1,51 @@
-const apiBaseUrl = 'http://localhost:8080/book'; // URL da API
-const livrosList = document.getElementById('livrosList');
+function buscarLivros() {
+    const livro = document.getElementById("livroInput").value.replace(" ", "_"); // Substitui espaços por "_"
+    const url = `http://localhost:8080/book/procurarlivroexterno/${livro}`; // URL corrigida com o prefixo '/book'
 
-// Função para carregar livros
-function carregarLivros() {
-    fetch(apiBaseUrl)
-        .then(response => response.json())  // Converte a resposta em JSON
-        .then(livros => {
-            livrosList.innerHTML = ''; // Limpa a lista antes de adicionar os novos livros
-            livros.forEach(livro => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <h3>${livro.title}</h3>
-                    <p><span>Autor:</span> ${livro.autor}</p>
-                    <p><span>Data de Criação:</span> ${livro.dataCriada}</p>
-                    <p><span>Sinopse:</span> ${livro.sinopse}</p>
-                    <div><span>Conteúdo:</span>
-                        <ul>
-                            ${livro.conteudo.map(capitulo => {
-                                return `
-                                    <li>
-                                        <strong>${capitulo.capitulo} - ${capitulo.titulo}</strong>
-                                        <p>${capitulo.texto}</p>
-                                    </li>
-                                `;
-                            }).join('')}
-                        </ul>
-                    </div>
-                `;
-                livrosList.appendChild(li);
-            });
+    console.log("URL da requisição:", url);
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao buscar livros. Tente novamente mais tarde.');
+            }
+            return response.json();
         })
-        .catch(error => console.error('Erro ao carregar livros:', error));
+        .then(data => {
+            console.log("Resposta da API:", data);
+            mostrarLivros(data);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert(error.message);
+        });
 }
 
-// Carregar livros quando a página for carregada
-document.addEventListener('DOMContentLoaded', carregarLivros);
+function mostrarLivros(data) {
+    const resultadosDiv = document.getElementById("resultados");
+    resultadosDiv.innerHTML = ""; // Limpar resultados anteriores
+
+    if (data.items && data.items.length > 0) {
+        data.items.forEach(item => {
+            const livro = item.volumeInfo;
+            const livroDiv = document.createElement("div");
+            livroDiv.classList.add("livro");
+
+            const img = livro.imageLinks ? `<img src="${livro.imageLinks.capa}" alt="${livro.titulo}" />` : "";
+            const descricao = livro.descricao ? `<p>${livro.descricao}</p>` : "<p>Sem descrição disponível.</p>";
+
+            livroDiv.innerHTML = `
+                ${img}
+                <h3>${livro.titulo}</h3>
+                ${descricao}
+                <p><strong>Autor(es):</strong> ${livro.autores.join(", ")}</p>
+                <p><strong>Data de Publicação:</strong> ${livro.dataPublicacao}</p>
+                <a href="${livro.previa}" target="_blank">Ver mais</a>
+            `;
+
+            resultadosDiv.appendChild(livroDiv);
+        });
+    } else {
+        resultadosDiv.innerHTML = "<p>Nenhum livro encontrado.</p>";
+    }
+}

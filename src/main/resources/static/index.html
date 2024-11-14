@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Livros</title>
+    <title>Buscar Livros</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
-    <h1>Lista de Livros</h1>
+    <h1>Busca de Livros</h1>
+    <input type="text" id="livroInput" placeholder="Digite o nome do livro" />
+    <button onclick="buscarLivros()">Buscar</button>
 
-    <ul id="livrosList">
-        <!-- Os livros serão carregados aqui -->
-    </ul>
+    <div id="resultados" class="resultados">
+        <!-- Os resultados serão exibidos aqui -->
+    </div>
 </div>
 
 <script src="script.js"></script>

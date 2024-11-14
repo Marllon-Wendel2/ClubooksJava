@@ -3,7 +3,9 @@ package com.example.Clubooks.books.service;
 import com.example.Clubooks.books.dto.BookDTO;
 import com.example.Clubooks.books.model.Livro;
 import com.example.Clubooks.books.repository.LivroRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,12 +93,11 @@ public class LivroService {
         ConverterDados conversor = new ConverterDados();
         ConsumirAPI consumir = new ConsumirAPI();
 
-
         var json = consumir.obterdados(query);
         System.out.println("Resposta JSON da API: " + json);
 
 
-        BookDTO dados = conversor.obterdados(json, BookDTO.class);
+        var dados = conversor.obterdados(json, BookDTO.class);
         System.out.println("Dados convertidos para BookDTO: " + dados);
 
 

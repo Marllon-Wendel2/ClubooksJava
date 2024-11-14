@@ -6,6 +6,7 @@ import com.example.Clubooks.books.dto.LivroExistenteDTO;
 import com.example.Clubooks.books.model.Conteudo;
 import com.example.Clubooks.books.model.Livro;
 import com.example.Clubooks.books.service.LivroService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -110,9 +111,11 @@ public class LivroController {
     }
 
     @GetMapping("/procurarlivroexterno/{query}")
-    public ResponseEntity<?> procurarlivroexterno(@PathVariable String query){
+    public ResponseEntity<?> procurarlivroexterno(@PathVariable String query) {
         BookDTO json = livroService.consumirapis(query);
-
+        if (json == null || json.items() == null || json.items().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum livro encontrado para a consulta.");
+        }
         return ResponseEntity.ok(json);
     }
 
