@@ -1,15 +1,16 @@
 package com.example.Clubooks.books.service;
 
-import com.example.Clubooks.books.model.Conteudo;
+import com.example.Clubooks.books.dto.BookDTO;
 import com.example.Clubooks.books.model.Livro;
 import com.example.Clubooks.books.repository.LivroRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,8 +67,41 @@ public class LivroService {
         }
     }
 
+    //exclui todos os livros
     public void deletartudo() {
         livroRepository.deleteAll();
+    }
+
+    //conta todos os livros
+    public long contarlivros() {
+        return livroRepository.count();
+    }
+
+    public boolean livroExistente(String title, String capa) {
+        // Verifica se o livro com o título e a capa existe
+        if (livroRepository.existsByTitleAndCapa(title, capa)) {
+            return true;
+
+        } else {
+            return false;
+        }
+
+    }
+
+    public BookDTO consumirapis(String query) {
+
+        ConverterDados conversor = new ConverterDados();
+        ConsumirAPI consumir = new ConsumirAPI();
+
+        var json = consumir.obterdados(query);
+        System.out.println("Resposta JSON da API: " + json);
+
+
+        var dados = conversor.obterdados(json, BookDTO.class);
+        System.out.println("Dados convertidos para BookDTO: " + dados);
+
+
+        return dados;
     }
 
 
