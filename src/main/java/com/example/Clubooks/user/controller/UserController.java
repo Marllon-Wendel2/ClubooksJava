@@ -1,5 +1,6 @@
 package com.example.Clubooks.user.controller;
 
+import com.example.Clubooks.user.dto.ApiResponse;
 import com.example.Clubooks.user.dto.UserDTO;
 import com.example.Clubooks.user.model.User;
 import com.example.Clubooks.user.service.UserServices;
@@ -25,7 +26,7 @@ public class UserController {
     private UserServices userServices;
 
     @PostMapping
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
+    public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -34,11 +35,11 @@ public class UserController {
             }
         }
         try {
-        User newUser = userServices.createUser(userDTO);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        String message = userServices.createUser(userDTO);
+        return new ResponseEntity<>(new ApiResponse(true, message), HttpStatus.CREATED);
         }
         catch (Exception e) {
-            return new ResponseEntity<>("Erro ao criar usuário: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ApiResponse(false, "Erro ao criar usuário: " + e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -65,6 +66,16 @@ public class UserController {
     } catch (Exception e) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    }
+
+    @GetMapping("/confirmation/{token}")
+    public ResponseEntity<?> confirmedEmail(@PathVariable String token) {
+        try {
+            userServices.confirmedEmail(token);
+            return new ResponseEntity<>("E-mail confirmado", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/{id}")

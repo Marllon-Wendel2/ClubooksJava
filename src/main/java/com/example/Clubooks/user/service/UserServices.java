@@ -24,9 +24,12 @@ public class UserServices {
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Transactional
-    public User createUser(UserDTO userDTO) {
+    public String createUser(UserDTO userDTO) {
         if(userRepository.existsByEmail(userDTO.email())) {
             throw new IllegalArgumentException("Email já cadastrado");
+        }
+        if(userRepository.existsByUsername(userDTO.username())) {
+            throw new IllegalArgumentException("Username já cadastrado");
         }
 
         User newUser = new User();
@@ -34,8 +37,9 @@ public class UserServices {
         newUser.setHashPassword(passwordEncoder.encode(userDTO.password()));
         newUser.setEmail(userDTO.email());
         newUser.setTokenConfirmation(generateToken());
+        userRepository.save(newUser);
 
-        return userRepository.save(newUser);
+        return "Usuário criado com sucesso";
     }
 
     private String generateToken() {
@@ -94,5 +98,16 @@ public class UserServices {
             return false;
         }
 
+    }
+
+    public void confirmedEmail(String token) {
+        User user = userRepository.findByTokenConfirmation(token);
+
+        if(user != null) {
+            user.setEmailConfirmed(true);
+            userRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("Token de confirmação inválido ou usuário não encontrado.");
+        }
     }
 }
