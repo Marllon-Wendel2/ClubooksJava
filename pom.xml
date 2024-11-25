@@ -11,7 +11,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>Clubooks</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Clubooks</name
+	<name>Clubooks</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
