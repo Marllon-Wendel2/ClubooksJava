@@ -1,6 +1,7 @@
 package com.example.Clubooks.books.controller;
 
 
+import com.example.Clubooks.books.dto.AutoresDTO;
 import com.example.Clubooks.books.dto.BookDTO;
 import com.example.Clubooks.books.dto.LivroExistenteDTO;
 import com.example.Clubooks.books.model.Conteudo;
@@ -119,7 +120,18 @@ public class LivroController {
         return ResponseEntity.ok(json);
     }
 
+    @GetMapping("/procurarautor/{autor}")
+    public ResponseEntity<List<AutoresDTO>> buscarAutor(@PathVariable String autor) {
+        String autorFormatado = autor.replace("_", " ").replace("+", " ");
+        List<AutoresDTO> lista = livroService.procurarAutor(autorFormatado);
+        if(lista == null || lista.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        else {
+            return ResponseEntity.ok(lista);
+        }
 
+    }
 
 
 }

@@ -1,5 +1,6 @@
 package com.example.Clubooks.books.service;
 
+import com.example.Clubooks.books.dto.AutoresDTO;
 import com.example.Clubooks.books.dto.BookDTO;
 import com.example.Clubooks.books.model.Livro;
 import com.example.Clubooks.books.repository.LivroRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LivroService {
@@ -102,6 +104,12 @@ public class LivroService {
 
 
         return dados;
+    }
+
+    public List<AutoresDTO> procurarAutor(String autor) {
+        List<Livro> livros = livroRepository.findByAutor(autor);
+        return livros.stream().map(livro -> new AutoresDTO(livro.getAutor(), livro.getTitle(), livro.getSinopse(), livro.getData())).collect(Collectors.toList()); // Acesso correto ao método getDataCriacao())).collect(Collectors.toList());
+
     }
 
 
