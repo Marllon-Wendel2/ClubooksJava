@@ -3,6 +3,7 @@ package com.example.Clubooks.user.model;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import java.util.Map;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+
+import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 
 
 @Document(collection = "users")
@@ -36,9 +39,14 @@ public class User implements UserDetails {
     private String tokenConfirmation;
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    private List<Authority> roles = List.of(new Authority("ROLE_USER"));
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return roles.stream()
+                .map(auth -> new SimpleGrantedAuthority(auth.getAuthority()))
+                .toList();
     }
 
     @Override
