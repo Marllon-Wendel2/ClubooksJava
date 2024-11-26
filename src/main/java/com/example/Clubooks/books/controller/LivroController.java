@@ -123,6 +123,7 @@ public class LivroController {
     @GetMapping("/procurarautor/{autor}")
     public ResponseEntity<List<AutoresDTO>> buscarAutor(@PathVariable String autor) {
         String autorFormatado = autor.replace("_", " ").replace("+", " ");
+
         List<AutoresDTO> lista = livroService.procurarAutor(autorFormatado);
         if(lista == null || lista.isEmpty()) {
             return ResponseEntity.notFound().build();

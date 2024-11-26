@@ -10,7 +10,7 @@ public interface LivroRepository extends MongoRepository<Livro, String> {
     // Método para encontrar livro pelo título e capa
     Livro findByTitleAndCapa(String title, String capa);
 
-    List<Livro>findByAutor(String autor);
+    List<Livro>findByAutorIgnoreCase(String autor);
 
     boolean existsByTitleAndCapa(String title, String capa);
 }

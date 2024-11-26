@@ -107,7 +107,7 @@ public class LivroService {
     }
 
     public List<AutoresDTO> procurarAutor(String autor) {
-        List<Livro> livros = livroRepository.findByAutor(autor);
+        List<Livro> livros = livroRepository.findByAutorIgnoreCase(autor);
         return livros.stream().map(livro -> new AutoresDTO(livro.getAutor(), livro.getTitle(), livro.getSinopse(), livro.getData())).collect(Collectors.toList()); // Acesso correto ao método getDataCriacao())).collect(Collectors.toList());
 
     }
