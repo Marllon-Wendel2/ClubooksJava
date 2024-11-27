@@ -8,6 +8,7 @@ import com.example.Clubooks.books.model.Conteudo;
 import com.example.Clubooks.books.model.Livro;
 import com.example.Clubooks.books.service.LivroService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/book")
+@SecurityRequirement(name = "bearer-key")
 public class LivroController {
 
     @Autowired
