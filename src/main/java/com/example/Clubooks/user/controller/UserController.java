@@ -4,6 +4,7 @@ import com.example.Clubooks.user.dto.ApiResponse;
 import com.example.Clubooks.user.dto.UserDTO;
 import com.example.Clubooks.user.model.User;
 import com.example.Clubooks.user.service.UserServices;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
+@SecurityRequirement(name = "bearer-key")
 public class UserController {
 
     @Autowired
