@@ -21,7 +21,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
-@SecurityRequirement(name = "bearer-key")
 public class UserController {
 
     @Autowired
@@ -44,7 +43,7 @@ public class UserController {
             return new ResponseEntity<>(new ApiResponse(false, "Erro ao criar usuário: " + e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
-
+    @SecurityRequirement(name = "bearer-key")
     @GetMapping
     public ResponseEntity<Page<User>> getAllUsers(@PageableDefault(size = 5) Pageable pageable) {
         try {
@@ -54,7 +53,7 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    @SecurityRequirement(name = "bearer-key")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
     try {
@@ -69,7 +68,7 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     }
-
+    @SecurityRequirement(name = "bearer-key")
     @GetMapping("/confirmation/{token}")
     public ResponseEntity<?> confirmedEmail(@PathVariable String token) {
         try {
@@ -79,7 +78,7 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    @SecurityRequirement(name = "bearer-key")
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User newUser) {
         User user = userServices.getUser(id);
@@ -94,7 +93,7 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    @SecurityRequirement(name = "bearer-key")
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable String id) {
         try {
