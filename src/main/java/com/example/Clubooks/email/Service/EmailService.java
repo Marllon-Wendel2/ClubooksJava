@@ -20,7 +20,9 @@ public class EmailService {
 
     public String sendEmail(EmailDTOs emailDTOs) {
 
-        Optional<User> user = userRepository.findById(emailDTOs.id());
+        Optional<User> user = userRepository.findByEmail(emailDTOs.destinatario());
+
+        if(user.isPresent()) {
         String link = "http://localhost:8080/confirmation/" + user.get().getTokenConfirmation();
         String message = """
                 <html>
@@ -36,7 +38,10 @@ public class EmailService {
                       </html>
                 """.formatted(link);
         String assunto = "E-mail de confirmação";
-
         return emailUtils.sendEmailText(emailDTOs.destinatario(), assunto, message);
+        } else {
+            throw new RuntimeException("Usuário não encontrado");
+        }
+
     }
 }
