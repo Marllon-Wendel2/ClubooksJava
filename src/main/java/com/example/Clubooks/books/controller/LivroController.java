@@ -147,8 +147,13 @@ public class LivroController {
         }
     }
     @GetMapping("/avaliacaoMedia/{idLivro}")
-    public ResponseEntity<Double> avaliacaoMedia(@PathVariable String idLivro) {
-        return ResponseEntity.ok(livroService.mostrarAvaliacaoGeral(idLivro));
+    public ResponseEntity<?> avaliacaoMedia(@PathVariable String idLivro) {
+        try{
+            Double media = livroService.mostrarAvaliacaoGeral(idLivro);
+            return ResponseEntity.ok(media);
+        }catch (exceptionPersonalizada e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }
 

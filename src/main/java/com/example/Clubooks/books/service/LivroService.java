@@ -167,6 +167,10 @@ public class LivroService {
 
 
         Double mediaAvaliacao = livro.getAvaliacao().stream().mapToDouble(avaliacao -> avaliacao.getNota()).average().orElse(0.0);
+
+        if (mediaAvaliacao == 0.0) {
+            throw new exceptionPersonalizada("Este livro não possui avaliação");
+        }
         return mediaAvaliacao;
 
     }
