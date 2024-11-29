@@ -23,7 +23,7 @@ public class EmailService {
         Optional<User> user = userRepository.findByEmail(emailDTOs.destinatario());
 
         if(user.isPresent()) {
-        String link = "http://localhost:8080/confirmation/" + user.get().getTokenConfirmation();
+        String link = "http://localhost:8080/users/confirmation/" + user.get().getTokenConfirmation();
         String message = """
                 <html>
                           <body>
