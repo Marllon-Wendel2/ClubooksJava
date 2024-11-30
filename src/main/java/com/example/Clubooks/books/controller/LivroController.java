@@ -1,12 +1,16 @@
 package com.example.Clubooks.books.controller;
 
 
+import com.example.Clubooks.books.dto.AutoresDTO;
 import com.example.Clubooks.books.dto.BookDTO;
 import com.example.Clubooks.books.dto.LivroExistenteDTO;
+import com.example.Clubooks.books.dto.avaliarDTO;
+import com.example.Clubooks.books.exceptions.exceptionPersonalizada;
 import com.example.Clubooks.books.model.Conteudo;
 import com.example.Clubooks.books.model.Livro;
 import com.example.Clubooks.books.service.LivroService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/book")
+@SecurityRequirement(name = "bearer-key")
 public class LivroController {
 
     @Autowired
@@ -90,13 +95,13 @@ public class LivroController {
 
     //excluir o banco por completo
     @DeleteMapping("/deletartudo")
-    public ResponseEntity<?> excluirtudo() {
+    public ResponseEntity<?> excluirTudo() {
         livroService.deletartudo();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/listartotal")
-    public ResponseEntity<?> listarnumerolivro() {
+    public ResponseEntity<?> listarNumeroLivro() {
         var a = livroService.contarlivros();
         return ResponseEntity.ok().body(a);
     }
@@ -111,7 +116,7 @@ public class LivroController {
     }
 
     @GetMapping("/procurarlivroexterno/{query}")
-    public ResponseEntity<?> procurarlivroexterno(@PathVariable String query) {
+    public ResponseEntity<?> procurarLivroExterno(@PathVariable String query) {
         BookDTO json = livroService.consumirapis(query);
         if (json == null || json.items() == null || json.items().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum livro encontrado para a consulta.");
@@ -119,8 +124,36 @@ public class LivroController {
         return ResponseEntity.ok(json);
     }
 
+    @GetMapping("/procurarautor/{autor}")
+    public ResponseEntity<List<AutoresDTO>> buscarAutor(@PathVariable String autor) {
+        String autorFormatado = autor.replace("_", " ").replace("+", " ");
 
-
-
+        List<AutoresDTO> lista = livroService.procurarAutor(autorFormatado);
+        if(lista == null || lista.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        else {
+            return ResponseEntity.ok(lista);
+        }
+    }
+    @PostMapping("/avaliar")
+    public ResponseEntity<String> avaliar(@RequestBody avaliarDTO avaliar ) {
+        try{
+            livroService.avaliarLivro(avaliar.avaliacao(), avaliar.idUsuario(), avaliar.idLivro());
+            String mensagem = "Avaliação foi registrada com sucesso.";
+            return ResponseEntity.ok(mensagem);
+        }catch (exceptionPersonalizada e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @GetMapping("/avaliacaoMedia/{idLivro}")
+    public ResponseEntity<?> avaliacaoMedia(@PathVariable String idLivro) {
+        try{
+            Double media = livroService.mostrarAvaliacaoGeral(idLivro);
+            return ResponseEntity.ok(media);
+        }catch (exceptionPersonalizada e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }
 

@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "livros")
@@ -21,7 +22,25 @@ public class Livro {
     private String capa;
     private String sinopse;
     private List<Conteudo> conteudo;
+    private List<Avaliacao> avaliacao = new ArrayList<>();
 
+    public List<Avaliacao> getAvaliacao() {
+        return avaliacao;
+    }
+
+    public void setAvaliacao(List<Avaliacao> avaliacao) {
+        this.avaliacao = avaliacao;
+    }
+
+
+
+    public Instant getDataCriada() {
+        return dataCriada;
+    }
+
+    public void setDataCriada(Instant dataCriada) {
+        this.dataCriada = dataCriada;
+    }
 
     public Instant getData() {
         return dataCriada;
