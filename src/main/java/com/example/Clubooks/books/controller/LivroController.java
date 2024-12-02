@@ -160,7 +160,12 @@ public class LivroController {
 
     @GetMapping("/listaavaliacao")
     public ResponseEntity<List<Avaliacao>> mostrarListaAvaliacao() {
-    return ResponseEntity.ok(avaliacaoService.obterTodasAsAvaliacoes());
+        return ResponseEntity.ok(avaliacaoService.obterTodasAsAvaliacoes());
+    }
+
+    @GetMapping("/livrosRecomendados")
+    public ResponseEntity<List<RecomendacaoLivroDTO>> mostrarRecomendacao() {
+        return ResponseEntity.ok(avaliacaoService.recomendacaoLivro());
     }
 }
 
