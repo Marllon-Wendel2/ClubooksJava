@@ -1,51 +1,54 @@
-function buscarLivros() {
-    const livro = document.getElementById("livroInput").value.replace(" ", "_"); // Substitui espaços por "_"
-    const url = `http://localhost:8080/book/procurarlivroexterno/${livro}`; // URL corrigida com o prefixo '/book'
+const API_URL = 'http://localhost:8080/book'; // Substitua pela URL da sua API
 
-    console.log("URL da requisição:", url);
+document.addEventListener('DOMContentLoaded', () => {
+    carregarLivros();
+    const form = document.getElementById('add-book-form');
+    form.addEventListener('submit', salvarLivro);
+});
 
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao buscar livros. Tente novamente mais tarde.');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Resposta da API:", data);
-            mostrarLivros(data);
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert(error.message);
-        });
+// Função para carregar livros
+async function carregarLivros() {
+    try {
+        const response = await fetch(`${API_URL}`);
+        if (!response.ok) throw new Error('Erro ao carregar livros');
+        const livros = await response.json();
+        exibirLivros(livros);
+    } catch (error) {
+        console.error(error);
+        alert('Erro ao carregar livros');
+    }
 }
 
-function mostrarLivros(data) {
-    const resultadosDiv = document.getElementById("resultados");
-    resultadosDiv.innerHTML = ""; // Limpar resultados anteriores
+// Função para salvar um livro
+async function salvarLivro(event) {
+    event.preventDefault();
+    const title = document.getElementById('title').value;
+    const author = document.getElementById('author').value;
+    const description = document.getElementById('description').value;
 
-    if (data.items && data.items.length > 0) {
-        data.items.forEach(item => {
-            const livro = item.volumeInfo;
-            const livroDiv = document.createElement("div");
-            livroDiv.classList.add("livro");
-
-            const img = livro.imageLinks ? `<img src="${livro.imageLinks.capa}" alt="${livro.titulo}" />` : "";
-            const descricao = livro.descricao ? `<p>${livro.descricao}</p>` : "<p>Sem descrição disponível.</p>";
-
-            livroDiv.innerHTML = `
-                ${img}
-                <h3>${livro.titulo}</h3>
-                ${descricao}
-                <p><strong>Autor(es):</strong> ${livro.autores.join(", ")}</p>
-                <p><strong>Data de Publicação:</strong> ${livro.dataPublicacao}</p>
-                <a href="${livro.previa}" target="_blank">Ver mais</a>
-            `;
-
-            resultadosDiv.appendChild(livroDiv);
+    const livro = { title, author, description };
+    try {
+        const response = await fetch(`${API_URL}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(livro)
         });
-    } else {
-        resultadosDiv.innerHTML = "<p>Nenhum livro encontrado.</p>";
+        if (!response.ok) throw new Error('Erro ao salvar livro');
+        alert('Livro salvo com sucesso');
+        carregarLivros();
+    } catch (error) {
+        console.error(error);
+        alert('Erro ao salvar livro');
     }
+}
+
+// Função para exibir livros na tela
+function exibirLivros(livros) {
+    const booksList = document.getElementById('books');
+    booksList.innerHTML = '';
+    livros.forEach(livro => {
+        const li = document.createElement('li');
+        li.textContent = `${livro.title} por ${livro.author}`;
+        booksList.appendChild(li);
+    });
 }

@@ -1,5 +1,6 @@
 package com.example.Clubooks.books.repository;
 
+import com.example.Clubooks.books.model.Avaliacao;
 import com.example.Clubooks.books.model.Livro;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;

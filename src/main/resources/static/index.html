@@ -1,22 +1,31 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar Livros</title>
+    <title>Gestão de Livros</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    <h1>Busca de Livros</h1>
-    <input type="text" id="livroInput" placeholder="Digite o nome do livro" />
-    <button onclick="buscarLivros()">Buscar</button>
+<header>
+    <h1>Gestão de Livros</h1>
+</header>
+<main>
+    <section id="book-form">
+        <h2>Adicionar ou Atualizar Livro</h2>
+        <form id="add-book-form">
+            <input type="text" id="title" placeholder="Título do Livro" required>
+            <input type="text" id="author" placeholder="Autor" required>
+            <textarea id="description" placeholder="Descrição"></textarea>
+            <button type="submit">Salvar Livro</button>
+        </form>
+    </section>
 
-    <div id="resultados" class="resultados">
-        <!-- Os resultados serão exibidos aqui -->
-    </div>
-</div>
-
+    <section id="book-list">
+        <h2>Lista de Livros</h2>
+        <ul id="books"></ul>
+    </section>
+</main>
 <script src="script.js"></script>
 </body>
 </html>

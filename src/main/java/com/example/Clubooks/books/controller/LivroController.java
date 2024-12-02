@@ -1,13 +1,12 @@
 package com.example.Clubooks.books.controller;
 
 
-import com.example.Clubooks.books.dto.AutoresDTO;
-import com.example.Clubooks.books.dto.BookDTO;
-import com.example.Clubooks.books.dto.LivroExistenteDTO;
-import com.example.Clubooks.books.dto.avaliarDTO;
+import com.example.Clubooks.books.dto.*;
 import com.example.Clubooks.books.exceptions.exceptionPersonalizada;
+import com.example.Clubooks.books.model.Avaliacao;
 import com.example.Clubooks.books.model.Conteudo;
 import com.example.Clubooks.books.model.Livro;
+import com.example.Clubooks.books.service.AvaliacaoService;
 import com.example.Clubooks.books.service.LivroService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,6 +24,9 @@ public class LivroController {
 
     @Autowired
     private LivroService livroService;
+
+    @Autowired
+    private AvaliacaoService avaliacaoService;
 
     // Endpoint para salvar ou atualizar um livro
     @PostMapping
@@ -155,5 +157,11 @@ public class LivroController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @GetMapping("/listaavaliacao")
+    public ResponseEntity<List<Avaliacao>> mostrarListaAvaliacao() {
+    return ResponseEntity.ok(avaliacaoService.obterTodasAsAvaliacoes());
+    }
 }
+
 
