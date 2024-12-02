@@ -27,9 +27,12 @@ public class AuthController {
     public ResponseEntity doLogin(@RequestBody @Valid DataAutentication data) {
         System.out.println(data.password());
         var token = new UsernamePasswordAuthenticationToken(data.username(), data.password());
+        System.out.println(token);
         var authentication = manager.authenticate(token);
+        System.out.println(authentication);
 
         var tokenJWT = tokenService.buildToken((User) authentication.getPrincipal());
+        System.out.println(tokenJWT);
 
         return ResponseEntity.ok(new ApiResponse(true, tokenJWT));
     }

@@ -26,9 +26,10 @@ public class SecurityConfig {
         return  httpSecurity.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST, "/login", "/users").permitAll()
-                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
+                .requestMatchers(HttpMethod.POST, "/login","/users").permitAll()
                 .requestMatchers(HttpMethod.GET, "/users/confirmation/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/book").hasRole("AUTHOR")
                 .anyRequest().authenticated()
                 .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

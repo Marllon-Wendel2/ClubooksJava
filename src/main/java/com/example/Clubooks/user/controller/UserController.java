@@ -1,10 +1,11 @@
 package com.example.Clubooks.user.controller;
 
+import com.example.Clubooks.logs.dtos.LogsDTO;
+import com.example.Clubooks.logs.service.LogsService;
 import com.example.Clubooks.user.dto.ApiResponse;
 import com.example.Clubooks.user.dto.UserDTO;
 import com.example.Clubooks.user.model.User;
 import com.example.Clubooks.user.service.UserServices;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,27 +24,34 @@ import java.util.Map;
 @RequestMapping("/users")
 public class UserController {
 
+
     @Autowired
     private UserServices userServices;
 
     @PostMapping
     public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-        }
         try {
-        String message = userServices.createUser(userDTO);
-        return new ResponseEntity<>(new ApiResponse(true, message), HttpStatus.CREATED);
+            String message = userServices.createUser(userDTO);
+
+            return new ResponseEntity<>(new ApiResponse(true, message), HttpStatus.CREATED);
         }
         catch (Exception e) {
             return new ResponseEntity<>(new ApiResponse(false, "Erro ao criar usuário: " + e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
-    @SecurityRequirement(name = "bearer-key")
+
+    @PostMapping("/beAuthor/{id}")
+    public ResponseEntity<ApiResponse> beAuthor(@PathVariable String id) {
+        try {
+            String message = userServices.beAuthor(id);
+
+            return new ResponseEntity<>(new ApiResponse(true, message), HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ApiResponse(false, "Erro ao criar usuário: " + e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping
     public ResponseEntity<Page<User>> getAllUsers(@PageableDefault(size = 5) Pageable pageable) {
         try {
@@ -53,7 +61,7 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @SecurityRequirement(name = "bearer-key")
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
     try {
@@ -68,7 +76,7 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     }
-    @SecurityRequirement(name = "bearer-key")
+
     @GetMapping("/confirmation/{token}")
     public ResponseEntity<?> confirmedEmail(@PathVariable String token) {
         try {
@@ -78,7 +86,7 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @SecurityRequirement(name = "bearer-key")
+
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User newUser) {
         User user = userServices.getUser(id);
@@ -93,7 +101,7 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @SecurityRequirement(name = "bearer-key")
+
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable String id) {
         try {

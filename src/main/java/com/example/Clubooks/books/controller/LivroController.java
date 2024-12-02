@@ -6,7 +6,6 @@ import com.example.Clubooks.books.dto.BookDTO;
 import com.example.Clubooks.books.dto.LivroExistenteDTO;
 import com.example.Clubooks.books.dto.avaliarDTO;
 import com.example.Clubooks.books.exceptions.exceptionPersonalizada;
-import com.example.Clubooks.books.model.Conteudo;
 import com.example.Clubooks.books.model.Livro;
 import com.example.Clubooks.books.service.LivroService;
 import com.fasterxml.jackson.core.JsonProcessingException;
