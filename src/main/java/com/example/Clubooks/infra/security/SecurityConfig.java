@@ -27,8 +27,13 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/login", "/users").permitAll()
+<<<<<<< HEAD
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "index.html", "script.js", "style.css").permitAll()
                 .requestMatchers("/confirmation/**").permitAll()
+=======
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/users/confirmation/**").permitAll()
+>>>>>>> 559b7fa79a81ad2949586ac70797ce43a39a3c77
                 .anyRequest().authenticated()
                 .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
